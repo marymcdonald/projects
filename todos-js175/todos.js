@@ -40,10 +40,10 @@ app.use(flash());
 //Set up persistent session data
 app.use((req, res, next) => {
   let todoLists = [];
-  if (!("todoLists" in req.session)) {
+  if ("todoLists" in req.session) {
     req.session.todoLists.forEach(todoList => {
       todoLists.push(TodoList.makeTodoList(todoList));
-    })
+    });
   }
 
   req.session.todoLists = todoLists;
@@ -156,6 +156,7 @@ app.post("/lists/:todoListId/todos",
 
 });
 
+//Toggle completion status of a todo
 app.post("/lists/:todoListId/todos/:todoId/toggle", (req, res, next) => {
 let {todoListId, todoId} = {...req.params};
 let desiredList = loadTodoList(+todoListId, req.session.todoLists);
